@@ -107,19 +107,15 @@ export default function ContactForm() {
         </label>
       </div>
 
+      {/* Freiwillig – die Anfrage funktioniert auch ohne Haken */}
       <div className={styles.consent}>
         <label>
-          <input type="checkbox" name="consent" checked={values.consent} onChange={onChange} aria-invalid={Boolean(errors.consent)} />
+          <input type="checkbox" name="marketingOptIn" checked={values.marketingOptIn} onChange={onChange} />
           <span>
-            Ich bin einverstanden, dass RareFind mich zu meiner Anfrage kontaktiert. Mehr in der{' '}
-            <a href="#datenschutz">Datenschutzerklärung</a>.
+            Ihr dürft mich per E-Mail zu neuen Funden und Angeboten von RareFind kontaktieren.{' '}
+            <span className={styles.optional}>(freiwillig, jederzeit widerrufbar)</span>
           </span>
         </label>
-        {errors.consent && (
-          <p className={styles.error} role="alert">
-            {errors.consent}
-          </p>
-        )}
       </div>
 
       {status === 'error' && (
@@ -131,6 +127,11 @@ export default function ContactForm() {
       <Button type="submit" size="lg" block disabled={status === 'sending'}>
         {status === 'sending' ? 'Wird gesendet …' : 'Kostenlos Preis anfragen'}
       </Button>
+
+      <p className={styles.notice}>
+        Deine Einschätzung mit Angebot und Preis bekommst du per E-Mail. Wir nutzen deine Angaben nur, um deine
+        Anfrage zu beantworten. Mehr dazu in der <a href="#/datenschutz">Datenschutzerklärung</a>.
+      </p>
     </form>
   )
 }

@@ -9,6 +9,5 @@ export function validateInquiry(values) {
   if (values.contactVia === 'phone' && values.phone.trim().length < 6) {
     errors.phone = 'Bitte gib deine Telefonnummer an.'
   }
-  if (!values.consent) errors.consent = 'Bitte stimme der Kontaktaufnahme zu.'
   return errors
 }

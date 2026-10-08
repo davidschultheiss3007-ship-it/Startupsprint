@@ -9,7 +9,7 @@ const initialValues = {
   request: '',
   budget: '',
   contactVia: 'email',
-  consent: false,
+  marketingOptIn: false, // freiwillige Einwilligung in weitere E-Mails
   website: '', // Honeypot gegen Spam-Bots – bleibt für Menschen unsichtbar
 }
 

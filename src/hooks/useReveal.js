@@ -1,7 +1,10 @@
 import { useEffect } from 'react'
 
-/** Blendet alle Elemente mit [data-reveal] beim Scrollen sanft ein. */
-export default function useReveal() {
+/**
+ * Blendet alle Elemente mit [data-reveal] beim Scrollen sanft ein.
+ * `key` wechselt mit der Seite, damit neu gerenderte Elemente erfasst werden.
+ */
+export default function useReveal(key) {
   useEffect(() => {
     const nodes = document.querySelectorAll('[data-reveal]')
     if (typeof IntersectionObserver === 'undefined') {
@@ -21,5 +24,5 @@ export default function useReveal() {
     )
     nodes.forEach((n) => observer.observe(n))
     return () => observer.disconnect()
-  }, [])
+  }, [key])
 }

@@ -1,6 +1,7 @@
 // Schlanke Linien-Icons (24×24, currentColor) – keine externe Icon-Library nötig.
 const paths = {
   arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
+  plus: <path d="M12 5v14M5 12h14" />,
   shield: <path d="M12 3l7 3v6c0 4.4-3 7.9-7 9-4-1.1-7-4.6-7-9V6l7-3z" />,
   globe: (
     <>

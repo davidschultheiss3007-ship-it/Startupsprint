@@ -11,8 +11,9 @@ export default function Footer() {
         </div>
         <nav className={styles.links} aria-label="Rechtliches">
           <a href={`mailto:${brand.email}`}>{brand.email}</a>
-          <a href="#impressum">Impressum</a>
-          <a href="#datenschutz">Datenschutz</a>
+          <a href="#/faq">FAQ</a>
+          <a href="#/impressum">Impressum</a>
+          <a href="#/datenschutz">Datenschutz</a>
         </nav>
       </div>
       <div className={`container ${styles.bottom}`}>

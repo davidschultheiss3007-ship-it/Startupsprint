@@ -1,0 +1,235 @@
+/* Seitenkopf */
+.intro {
+  padding-block: clamp(3rem, 2rem + 4vw, 6rem) clamp(2.5rem, 2rem + 2vw, 4rem);
+}
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-tag);
+  font-size: var(--text-eyebrow);
+  color: var(--color-accent);
+  transform: rotate(-2deg);
+  transform-origin: left center;
+}
+
+.title {
+  margin-top: 1rem;
+  max-width: 14ch;
+  font-size: var(--text-h1);
+}
+
+.lead {
+  margin-top: 1.5rem;
+  max-width: 36rem;
+  font-size: var(--text-lead);
+  color: var(--color-ink-soft);
+}
+
+.jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 2rem;
+}
+
+.jump a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 1.1rem;
+  border: 1.5px solid var(--color-line);
+  border-radius: var(--radius-pill);
+  font-weight: 500;
+  text-decoration: none;
+  transition: border-color 0.2s;
+}
+
+.jump a:hover {
+  border-color: var(--color-ink);
+}
+
+/* Vergleich mit Alternativen */
+.compare {
+  padding-block: var(--section-y);
+  background: var(--color-surface);
+}
+
+.compareGrid {
+  display: grid;
+  gap: 1rem;
+  margin: 2.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.compareCard {
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+  padding: 1.5rem;
+  background: var(--color-bg);
+  border-radius: var(--radius);
+}
+
+.alt {
+  font-family: var(--font-display);
+  font-size: var(--text-h3);
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.weakness {
+  color: var(--color-ink-soft);
+}
+
+.us {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-line);
+}
+
+.usBadge {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-top: 0.1rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: var(--color-invert-ink);
+}
+
+/* Fragen */
+.groups {
+  display: grid;
+  gap: 3.5rem;
+}
+
+.group {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.groupTitle {
+  font-size: clamp(1.9rem, 1.5rem + 1.6vw, 2.6rem);
+}
+
+.list {
+  border-top: 1px solid var(--color-line);
+}
+
+.item {
+  border-bottom: 1px solid var(--color-line);
+}
+
+.item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 3.5rem;
+  padding-block: 1.1rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.35;
+  cursor: pointer;
+  list-style: none;
+}
+
+.item summary::-webkit-details-marker {
+  display: none;
+}
+
+.toggle {
+  flex: none;
+  transition: transform 0.3s var(--ease);
+}
+
+.item[open] .toggle {
+  transform: rotate(45deg);
+}
+
+.answer {
+  display: grid;
+  gap: 0.9rem;
+  padding-bottom: 1.5rem;
+  max-width: 44rem;
+  color: var(--color-ink-soft);
+}
+
+/* Abschluss */
+.cta {
+  padding-block: var(--section-y);
+  background: var(--color-invert-bg);
+  color: var(--color-invert-ink);
+}
+
+.ctaInner {
+  display: grid;
+  gap: 2rem;
+}
+
+.ctaTitle {
+  font-size: var(--text-h2);
+}
+
+.ctaText {
+  margin-top: 1rem;
+  max-width: 32rem;
+  font-size: var(--text-lead);
+  color: var(--color-invert-soft);
+}
+
+@media (min-width: 48rem) {
+  .compareGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .compareCard {
+    padding: 2rem;
+  }
+}
+
+@media (min-width: 60rem) {
+  .group {
+    grid-template-columns: 0.8fr 1.6fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .groupTitle {
+    position: sticky;
+    top: calc(var(--header-h) + 2rem);
+  }
+
+  .ctaInner {
+    grid-template-columns: 1fr auto;
+    align-items: end;
+  }
+}
+
+@media (min-width: 68rem) {
+  .compareGrid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  /* 3 + 2 Karten, die untere Reihe zentriert */
+  .compareCard {
+    grid-column: span 2;
+  }
+
+  .compareCard:nth-child(4) {
+    grid-column: 2 / span 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggle {
+    transition: none;
+  }
+}

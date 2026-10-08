@@ -1,0 +1,25 @@
+/* Schriften lokal ausgeliefert – kein Abruf bei Google Fonts, damit beim Seitenaufruf
+   keine IP-Adressen an Dritte übertragen werden (siehe Datenschutzerklärung). */
+@font-face {
+  font-family: 'Anton';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('../assets/fonts/anton.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Permanent Marker';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('../assets/fonts/permanent-marker.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+  src: url('../assets/fonts/inter.woff2') format('woff2');
+}
