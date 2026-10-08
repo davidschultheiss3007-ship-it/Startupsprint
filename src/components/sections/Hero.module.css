@@ -1,0 +1,124 @@
+.hero {
+  padding-block: 2rem var(--section-y);
+  overflow: hidden;
+}
+
+.grid {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.eyebrow {
+  /* Marker-"Tag" im Graffiti-Stil */
+  display: inline-block;
+  font-family: var(--font-tag);
+  font-size: var(--text-eyebrow);
+  line-height: 1.2;
+  color: var(--color-accent);
+  transform: rotate(-2deg);
+  transform-origin: left center;
+}
+
+.title {
+  margin-top: 1rem;
+  font-size: var(--text-h1);
+  line-height: 0.92;
+}
+
+.title span {
+  display: block;
+}
+
+/* Zweite Zeile als Akzent in Rot */
+.title span:last-child {
+  color: var(--color-accent);
+}
+
+.lead {
+  margin-top: 1.5rem;
+  max-width: 30rem;
+  font-size: var(--text-lead);
+  color: var(--color-ink-soft);
+}
+
+.actions {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trust li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.visual {
+  position: relative;
+  margin-inline: -0.5rem;
+}
+
+.visual::before {
+  content: '';
+  position: absolute;
+  inset: 12% 8% 0;
+  background: radial-gradient(closest-side, #f1efeb, transparent);
+  z-index: -1;
+}
+
+.visual img {
+  width: 100%;
+  height: auto;
+  animation: float 7s ease-in-out infinite;
+  mix-blend-mode: multiply; /* blendet den hellen Bildhintergrund in die Seite */
+}
+
+@keyframes float {
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .visual img {
+    animation: none;
+  }
+}
+
+@media (min-width: 30rem) {
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+@media (min-width: 60rem) {
+  .hero {
+    padding-top: 4rem;
+  }
+
+  .title span {
+    white-space: nowrap;
+  }
+
+  .grid {
+    grid-template-columns: 1.05fr 1fr;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .visual {
+    margin: 0 -2rem 0 0;
+  }
+}

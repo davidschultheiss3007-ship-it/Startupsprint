@@ -1,0 +1,45 @@
+:root {
+  /* Farben – schwarz/weiß wie im Entwurf, mit warmem Rot als Akzent */
+  --color-bg: #ffffff;
+  --color-surface: #f6f5f3;
+  --color-ink: #111111;
+  --color-ink-soft: #4a4a4a;
+  --color-line: #e6e4e0;
+  --color-accent: #c8102e;
+  --color-invert-bg: #111111;
+  --color-invert-ink: #ffffff;
+  --color-invert-soft: #b9b9b9;
+  --color-success: #1f7a4d;
+  --color-error: #b3261e;
+
+  /* Typografie – Mobile-Basis, wächst per clamp() */
+  /* Hip-Hop-Look: fette Poster-Schrift für Headlines, Marker-Tag als Akzent */
+  --font-display: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
+  --font-tag: 'Permanent Marker', 'Comic Sans MS', cursive;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --text-base: 1.0625rem;                            /* 17px – nie kleiner für Fließtext */
+  --text-lead: clamp(1.125rem, 1rem + 0.6vw, 1.3rem);
+  --text-h3: clamp(1.4rem, 1.25rem + 0.6vw, 1.7rem);
+  --text-h2: clamp(2.4rem, 1.7rem + 3vw, 4rem);
+  --text-h1: clamp(3.6rem, 2.2rem + 5.5vw, 6rem);
+  --text-eyebrow: 1.15rem;
+
+  /* Abstände */
+  --gutter: 1.25rem;
+  --section-y: clamp(4rem, 3rem + 5vw, 7.5rem);
+  --radius: 1.25rem;
+  --radius-pill: 999px;
+  --max-width: 76rem;
+
+  --header-h: 4rem;
+  --shadow-soft: 0 12px 40px -18px rgba(0, 0, 0, 0.25);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --gutter: 2rem;
+    --header-h: 4.5rem;
+  }
+}
