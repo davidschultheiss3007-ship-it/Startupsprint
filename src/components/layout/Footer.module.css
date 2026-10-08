@@ -9,8 +9,9 @@
 }
 
 .logo {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 2rem;
+  text-transform: uppercase;
   line-height: 1;
 }
 

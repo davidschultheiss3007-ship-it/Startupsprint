@@ -13,15 +13,17 @@
   --color-error: #b3261e;
 
   /* Typografie – Mobile-Basis, wächst per clamp() */
-  --font-serif: 'Instrument Serif', 'Times New Roman', serif;
+  /* Hip-Hop-Look: fette Poster-Schrift für Headlines, Marker-Tag als Akzent */
+  --font-display: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
+  --font-tag: 'Permanent Marker', 'Comic Sans MS', cursive;
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   --text-base: 1.0625rem;                            /* 17px – nie kleiner für Fließtext */
   --text-lead: clamp(1.125rem, 1rem + 0.6vw, 1.3rem);
-  --text-h3: clamp(1.5rem, 1.3rem + 0.8vw, 1.85rem);
-  --text-h2: clamp(2.25rem, 1.6rem + 3vw, 3.75rem);
-  --text-h1: clamp(3.25rem, 2rem + 6.5vw, 6.5rem);
-  --text-eyebrow: 0.8125rem;
+  --text-h3: clamp(1.4rem, 1.25rem + 0.6vw, 1.7rem);
+  --text-h2: clamp(2.4rem, 1.7rem + 3vw, 4rem);
+  --text-h1: clamp(3.6rem, 2.2rem + 5.5vw, 6rem);
+  --text-eyebrow: 1.15rem;
 
   /* Abstände */
   --gutter: 1.25rem;

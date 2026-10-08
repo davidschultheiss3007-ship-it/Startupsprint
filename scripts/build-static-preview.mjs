@@ -22,8 +22,10 @@ const fontDir = resolve(root, 'scripts/preview-fonts')
 
 const font = (file) => readFileSync(resolve(fontDir, file)).toString('base64')
 const fontCss = `
-@font-face { font-family: 'Instrument Serif'; font-weight: 400; font-style: normal; font-display: swap;
-  src: url(data:font/woff2;base64,${font('instrument-serif.woff2')}) format('woff2'); }
+@font-face { font-family: 'Anton'; font-weight: 400; font-style: normal; font-display: swap;
+  src: url(data:font/woff2;base64,${font('anton.woff2')}) format('woff2'); }
+@font-face { font-family: 'Permanent Marker'; font-weight: 400; font-style: normal; font-display: swap;
+  src: url(data:font/woff2;base64,${font('permanent-marker.woff2')}) format('woff2'); }
 @font-face { font-family: 'Inter'; font-weight: 400 600; font-style: normal; font-display: swap;
   src: url(data:font/woff2;base64,${font('inter.woff2')}) format('woff2'); }
 `

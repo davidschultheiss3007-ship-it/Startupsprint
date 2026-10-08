@@ -11,11 +11,14 @@
 }
 
 .eyebrow {
+  /* Marker-"Tag" im Graffiti-Stil */
+  display: inline-block;
+  font-family: var(--font-tag);
   font-size: var(--text-eyebrow);
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--color-ink-soft);
+  line-height: 1.2;
+  color: var(--color-accent);
+  transform: rotate(-2deg);
+  transform-origin: left center;
 }
 
 .title {
@@ -28,17 +31,14 @@
   max-width: 34rem;
 }
 
-.invert .eyebrow,
+.invert .eyebrow {
+  color: #ff4d61;
+}
+
 .invert .text {
   color: var(--color-invert-soft);
 }
 
 .invert .title {
   color: var(--color-invert-ink);
-}
-
-@media (min-width: 48rem) {
-  .eyebrow {
-    letter-spacing: 0.28em;
-  }
 }
