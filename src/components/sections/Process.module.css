@@ -1,0 +1,84 @@
+.grid {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.steps {
+  position: relative;
+  display: grid;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Verbindungslinie zwischen den Schritten (mobil vertikal) */
+.steps::before {
+  content: '';
+  position: absolute;
+  left: 1.75rem;
+  top: 1rem;
+  bottom: 1rem;
+  width: 1px;
+  background: var(--color-line);
+}
+
+.step {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+}
+
+.number {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border: 1.5px solid var(--color-ink);
+  border-radius: 50%;
+  background: var(--color-bg);
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+}
+
+.title {
+  font-size: var(--text-h3);
+  padding-top: 0.6rem;
+}
+
+.text {
+  margin-top: 0.35rem;
+  color: var(--color-ink-soft);
+}
+
+@media (min-width: 60rem) {
+  .grid {
+    grid-template-columns: 0.8fr 1.4fr;
+    align-items: center;
+    gap: 4rem;
+  }
+
+  .steps {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .steps::before {
+    left: 1.75rem;
+    right: 1.75rem;
+    top: 1.75rem;
+    bottom: auto;
+    width: auto;
+    height: 1px;
+  }
+
+  .step {
+    flex-direction: column;
+  }
+
+  .title {
+    padding-top: 0.5rem;
+  }
+}

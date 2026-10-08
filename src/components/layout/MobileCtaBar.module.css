@@ -1,0 +1,24 @@
+.bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  padding: 0.75rem var(--gutter) calc(0.75rem + env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--color-line);
+  transform: translateY(110%);
+  transition: transform 0.4s var(--ease);
+}
+
+.visible {
+  transform: none;
+}
+
+@media (min-width: 60rem) {
+  .bar {
+    display: none;
+  }
+}

@@ -1,0 +1,56 @@
+.network {
+  position: relative;
+  padding-block: var(--section-y);
+  background: var(--color-invert-bg);
+  color: var(--color-invert-ink);
+  overflow: hidden;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sources li {
+  padding: 0.55rem 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-pill);
+  font-size: 1rem;
+}
+
+.canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 32rem;
+  margin-inline: auto;
+}
+
+.glow {
+  position: absolute;
+  inset: 18%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(200, 16, 46, 0.35), transparent);
+  filter: blur(20px);
+}
+
+@media (min-width: 60rem) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 4rem;
+  }
+
+  .canvas {
+    max-width: none;
+  }
+}
