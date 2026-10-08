@@ -21,6 +21,7 @@ export async function submitInquiry(values) {
     request: values.request.trim(),
     budget: budgetLabels[values.budget] ?? '',
     contactVia: values.contactVia,
+    marketingOptIn: values.marketingOptIn,
     createdAt: new Date().toISOString(),
   }
 
@@ -31,6 +32,7 @@ export async function submitInquiry(values) {
       payload.phone && `Telefon: ${payload.phone}`,
       payload.budget && `Budget: ${payload.budget}`,
       `Kontakt bevorzugt per: ${payload.contactVia === 'phone' ? 'Telefon' : 'E-Mail'}`,
+      `Weitere E-Mails zu Funden und Angeboten: ${payload.marketingOptIn ? 'ja' : 'nein'}`,
       '',
       payload.request,
     ]

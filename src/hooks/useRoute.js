@@ -5,11 +5,12 @@ import { useEffect, useState } from 'react'
 export const routes = {
   faq: '#/faq',
   impressum: '#/impressum',
+  datenschutz: '#/datenschutz',
 }
 
 const pageFor = (hash) => Object.keys(routes).find((key) => routes[key] === hash) ?? 'home'
 
-/** Liefert die aktuelle Seite ('home' | 'faq' | 'impressum') und scrollt passend nach Seitenwechseln. */
+/** Liefert die aktuelle Seite ('home' | 'faq' | 'impressum' | 'datenschutz') und scrollt passend nach Seitenwechseln. */
 export default function useRoute() {
   const [page, setPage] = useState(() => pageFor(window.location.hash))
 

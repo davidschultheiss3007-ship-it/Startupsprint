@@ -5,14 +5,13 @@
 // hier im Headless-Browser gerendert und als reines HTML+CSS gespeichert:
 //   - alle <script>-Tags entfernt
 //   - Three.js-Globus als Bild eingefroren
-//   - Schriften als Base64 eingebettet (funktioniert offline)
+//   - Schriften sind per Vite-Singlefile-Build schon als Base64 eingebettet (funktioniert offline)
 //   - JS-abhängige Elemente (Mobile-Menü, CTA-Leiste, Scroll-Animationen) entschärft
-//
-//   - Unterseiten (#/faq, #/impressum) als eigene Dateien, Links darauf umgeschrieben
+//   - Unterseiten (#/faq, #/impressum, #/datenschutz) als eigene Dateien, Links darauf umgeschrieben
 //
 // Voraussetzung: `vite build --mode singlefile` hat .preview-build/index.html erzeugt.
 
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { writeFileSync, mkdirSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { chromium } from 'playwright'
@@ -21,18 +20,12 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const input = resolve(root, '.preview-build/index.html')
 const outDir = resolve(root, 'preview')
 // Hash-Route der App → Datei in preview/
-const pages = { '': 'index.html', '#/faq': 'faq.html', '#/impressum': 'impressum.html' }
-const fontDir = resolve(root, 'scripts/preview-fonts')
-
-const font = (file) => readFileSync(resolve(fontDir, file)).toString('base64')
-const fontCss = `
-@font-face { font-family: 'Anton'; font-weight: 400; font-style: normal; font-display: swap;
-  src: url(data:font/woff2;base64,${font('anton.woff2')}) format('woff2'); }
-@font-face { font-family: 'Permanent Marker'; font-weight: 400; font-style: normal; font-display: swap;
-  src: url(data:font/woff2;base64,${font('permanent-marker.woff2')}) format('woff2'); }
-@font-face { font-family: 'Inter'; font-weight: 400 600; font-style: normal; font-display: swap;
-  src: url(data:font/woff2;base64,${font('inter.woff2')}) format('woff2'); }
-`
+const pages = {
+  '': 'index.html',
+  '#/faq': 'faq.html',
+  '#/impressum': 'impressum.html',
+  '#/datenschutz': 'datenschutz.html',
+}
 
 // Ergänzende Styles, die JS-Verhalten durch reines CSS ersetzen
 const staticCss = `
@@ -66,15 +59,13 @@ const globeSrc = `data:image/jpeg;base64,${globe.toString('base64')}`
 
 async function serialize(hash) {
   const html = await page.evaluate(
-    ({ globeSrc, fontCss, staticCss, pages, isHome }) => {
+    ({ globeSrc, staticCss, pages, isHome }) => {
       const doc = document.documentElement.cloneNode(true)
       const $ = (sel) => doc.querySelector(sel)
       const $$ = (sel) => [...doc.querySelectorAll(sel)]
 
       // 1. Kein JavaScript
       $$('script, link[rel="modulepreload"]').forEach((n) => n.remove())
-      // Externe Schriften raus – sind eingebettet
-      $$('link[href*="fonts.g"]').forEach((n) => n.remove())
 
       // 2. Scroll-Animationen: alles sofort sichtbar
       $$('[data-reveal]').forEach((n) => {
@@ -105,7 +96,7 @@ async function serialize(hash) {
         form.setAttribute('action', `${mail}?subject=Anfrage%20%C3%BCber%20RareFind`)
         form.setAttribute('method', 'post')
         form.setAttribute('enctype', 'text/plain')
-        ;['request', 'name', 'email', 'consent'].forEach((name) =>
+        ;['request', 'name', 'email'].forEach((name) =>
           form.querySelector(`[name="${name}"]`)?.setAttribute('required', ''),
         )
       }
@@ -124,12 +115,12 @@ async function serialize(hash) {
 
       // 7. Styles ergänzen
       const style = doc.ownerDocument.createElement('style')
-      style.textContent = fontCss + staticCss
+      style.textContent = staticCss
       $('head').appendChild(style)
 
       return '<!doctype html>\n' + doc.outerHTML
     },
-    { globeSrc, fontCss, staticCss, pages, isHome: hash === '' },
+    { globeSrc, staticCss, pages, isHome: hash === '' },
   )
   return html
 }

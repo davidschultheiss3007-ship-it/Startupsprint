@@ -1,5 +1,5 @@
 import { imprint } from '../../data/content.js'
-import styles from './ImprintPage.module.css'
+import styles from './LegalPage.module.css'
 
 export default function ImprintPage() {
   const { company, address, representedBy, phone, email, register, vatId, responsible } = imprint

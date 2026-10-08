@@ -88,3 +88,27 @@
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+.lead {
+  max-width: 40rem;
+  font-size: var(--text-lead);
+  color: var(--color-ink-soft);
+}
+
+.block ul {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.6rem 0 0;
+  padding-left: 1.25rem;
+  color: var(--color-ink-soft);
+}
+
+.block p + p,
+.block ul + p {
+  margin-top: 0.75rem;
+}
+
+.updated {
+  color: var(--color-ink-soft);
+  font-size: 0.9375rem;
+}

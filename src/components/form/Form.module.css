@@ -128,8 +128,15 @@ textarea.input {
   accent-color: var(--color-ink);
 }
 
-.consent .error {
-  margin-top: 0.5rem;
+.notice {
+  font-size: 0.9375rem;
+  color: var(--color-ink-soft);
+  text-align: center;
+}
+
+.notice a {
+  color: var(--color-ink);
+  text-underline-offset: 3px;
 }
 
 .success {

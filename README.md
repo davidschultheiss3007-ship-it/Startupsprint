@@ -3,7 +3,7 @@
 Mobile-first Landingpage für **RareFind** – persönliche Beratung, starkes Netzwerk und ein individueller Preis pro Fall.
 Gebaut mit **React 19, Vite und Three.js** (über React Three Fiber).
 
-👉 **Vorschau ohne Installation:** den Ordner [`preview/`](preview/) (`index.html`, `faq.html`, `impressum.html`) herunterladen und `index.html` öffnen –
+👉 **Vorschau ohne Installation:** den Ordner [`preview/`](preview/) (`index.html`, `faq.html`, `impressum.html`, `datenschutz.html`) herunterladen und `index.html` öffnen –
 auch direkt auf dem iPhone (Dateien-App). Die Vorschau ist reines HTML+CSS ohne JavaScript,
 Bilder und Schriften sind eingebettet, sie funktioniert also offline. Der 3D-Globus ist darin ein Standbild,
 das Formular öffnet beim Absenden das E-Mail-Programm.
@@ -28,28 +28,29 @@ npm run build:preview  # Erzeugt die statische Vorschau preview/index.html (nutz
 | Preise | Kein Standardpreis – individuell, transparent, verhandelbar |
 | Anfrage | Formular als Haupt-Akquiseweg (Preis erfahren / verhandeln) |
 
-Zusätzlich gibt es zwei Unterseiten (Hash-Routing über `src/hooks/useRoute.js`, kein Router-Paket nötig):
+Zusätzlich gibt es drei Unterseiten (Hash-Routing über `src/hooks/useRoute.js`, kein Router-Paket nötig):
 
 | Seite | Adresse | Inhalt |
 | --- | --- | --- |
 | FAQ | `#/faq` | Vergleich mit Alternativen (eBay, Spezial-Marktplätze, Foren, Händler, Reseller) + Antworten auf typische Einwände in 4 Themen |
 | Impressum | `#/impressum` | Pflichtangaben nach § 5 DDG, § 18 Abs. 2 MStV, Haftungs- und Urheberrechtshinweise |
+| Datenschutz | `#/datenschutz` | Server-Logfiles (IP), Anfrageformular, freiwillige E-Mail-Einwilligung, Bezahlung, Rechte |
 
 Auf dem Smartphone erscheint nach dem Hero eine feste **„Preis anfragen“-Leiste**, die verschwindet, sobald das Formular sichtbar ist.
 
 ## Projektstruktur
 
 ```
-scripts/build-static-preview.mjs  # rendert die Seite zu statischem HTML für preview/
+scripts/build-static-preview.mjs  # rendert alle Seiten zu statischem HTML für preview/
 src/
 ├── App.jsx                  # Setzt die Sektionen zusammen
 ├── main.jsx                 # Einstiegspunkt
-├── assets/                  # Bilder
+├── assets/                  # Bilder, Schriften (lokal, kein Google Fonts)
 ├── data/content.js          # ALLE Texte – hier Inhalte anpassen
 ├── components/
 │   ├── layout/              # Header (mit Mobile-Menü), Footer, MobileCtaBar
 │   ├── sections/            # Hero, Usps, Network, Process, Pricing, Contact
-│   ├── pages/               # FaqPage, ImprintPage (Unterseiten)
+│   ├── pages/               # FaqPage, ImprintPage, PrivacyPage (Unterseiten)
 │   ├── form/                # ContactForm, Field, ChoiceChips
 │   ├── three/               # NetworkGlobe (Three.js / React Three Fiber)
 │   └── ui/                  # Button, Icon, SectionHeading
@@ -76,12 +77,24 @@ VITE_FORM_ENDPOINT=https://formspree.io/f/xxxxxxx
 VITE_CONTACT_EMAIL=anfrage@rarefind.de
 ```
 
-Das Formular sendet dann JSON (`name`, `email`, `phone`, `request`, `budget`, `contactVia`, `createdAt`).
+Das Formular sendet dann JSON (`name`, `email`, `phone`, `request`, `budget`, `contactVia`, `marketingOptIn`, `createdAt`).
 Ohne Endpunkt öffnet sich das E-Mail-Programm mit vorausgefüllter Nachricht.
+
+## Rechtliche Checkliste
+
+| Punkt | Umsetzung |
+| --- | --- |
+| Impressum mit Name, ladungsfähiger Anschrift, E-Mail | `#/impressum` (Daten fiktiv, siehe unten) |
+| Datenschutzerklärung | `#/datenschutz`, verlinkt im Footer und am Formular |
+| Kein Bezahlknopf, -link oder Kartenformular | Bezahllink wird nach Angebotsannahme persönlich per E-Mail geschickt (FAQ + Datenschutz) |
+| Formular | Keine Pflicht-Checkbox; Datenschutzhinweis mit Zweck und Link; Hinweis „Angebot und Preis per E-Mail“; weitere Mails nur per freiwilliger Checkbox (`marketingOptIn`) |
+| Keine Drittanbieter beim Seitenaufruf | Schriften lokal in `src/assets/fonts`, keine Cookies, kein Tracking |
+| Keine erfundenen Bewertungen, Zahlen oder Logos | Keine Testimonials/Statistiken/Partnerlogos; Markenlogos (Sneaker, Bremssattel) aus dem Hero-Bild retuschiert |
+| Vorbestellung | Gibt es aktuell nicht. Falls sie kommt: Liefertermin und Geld-zurück sichtbar direkt am Knopf |
 
 ## Offene Punkte vor dem Livegang
 
 - **Impressum enthält fiktive Daten** (Firma, Adresse, Geschäftsführung, Register, USt-IdNr.) – in `src/data/content.js` (`imprint`) durch echte Angaben ersetzen.
-- Datenschutzerklärung ergänzen (Link im Footer ist noch ein Platzhalter).
+- Datenschutzerklärung prüfen: Hosting-Anbieter und ggf. Formular-Dienstleister (`VITE_FORM_ENDPOINT`) konkret benennen.
 - Echte Kontakt-E-Mail eintragen.
-- Hero-Bild durch eigenes, lizenzfreies Bildmaterial ohne fremde Markenlogos ersetzen.
+- Hero-Bild langfristig durch eigene Fotos ersetzen.

@@ -9,6 +9,7 @@ import Pricing from './components/sections/Pricing.jsx'
 import Contact from './components/sections/Contact.jsx'
 import FaqPage from './components/pages/FaqPage.jsx'
 import ImprintPage from './components/pages/ImprintPage.jsx'
+import PrivacyPage from './components/pages/PrivacyPage.jsx'
 import useReveal from './hooks/useReveal.js'
 import useRoute from './hooks/useRoute.js'
 
@@ -25,7 +26,7 @@ function Home() {
   )
 }
 
-const pages = { home: Home, faq: FaqPage, impressum: ImprintPage }
+const pages = { home: Home, faq: FaqPage, impressum: ImprintPage, datenschutz: PrivacyPage }
 
 export default function App() {
   const page = useRoute()
