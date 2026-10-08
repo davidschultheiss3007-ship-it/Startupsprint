@@ -59,20 +59,26 @@ Jede Komponente hat ein eigenes CSS-Modul (`*.module.css`). Designwerte stehen z
 - Three.js wird erst geladen, wenn der Netzwerk-Bereich in die Nähe kommt, und pausiert außerhalb des Sichtfelds.
 - `prefers-reduced-motion` wird respektiert.
 
-## Anfrageformular anbinden
+## Anfrageformular (Web3Forms)
 
-Kopiere `.env.example` nach `.env` und trage einen Endpunkt ein (z. B. Formspree, Getform oder eine eigene API):
+Das Formular sendet Anfragen über [Web3Forms](https://web3forms.com) – die Mail geht an die Adresse,
+mit der der Access-Key angelegt wurde. Der Key ist in `src/lib/submitInquiry.js` hinterlegt
+(öffentlich, das ist bei Web3Forms so vorgesehen) und lässt sich per `.env` überschreiben:
 
 ```
-VITE_FORM_ENDPOINT=https://formspree.io/f/xxxxxxx
+VITE_WEB3FORMS_KEY=dein-access-key
 VITE_CONTACT_EMAIL=anfrage@rarefind.de
 ```
 
-Das Formular sendet dann JSON (`name`, `email`, `phone`, `request`, `budget`, `contactVia`, `createdAt`).
-Ohne Endpunkt öffnet sich das E-Mail-Programm mit vorausgefüllter Nachricht.
+Übermittelt werden Name, E-Mail, Telefon, Gesuch, Budget und bevorzugter Kontaktweg; `replyto` ist die
+Adresse der Anfragenden, sodass man direkt antworten kann. Das versteckte Feld `website` dient als Honeypot.
+Mit `VITE_WEB3FORMS_KEY=` (leer) öffnet sich stattdessen das E-Mail-Programm.
+
+Die statische Vorschau (`npm run build:preview`) sendet das Formular ohne JavaScript per HTML-POST an Web3Forms.
 
 ## Offene Punkte vor dem Livegang
 
 - Impressum und Datenschutzerklärung ergänzen (Links im Footer sind Platzhalter).
 - Echte Kontakt-E-Mail eintragen.
+- Im Web3Forms-Dashboard die Domain der Website freigeben (optional, schützt den Key vor Fremdnutzung).
 - Hero-Bild durch eigenes, lizenzfreies Bildmaterial ohne fremde Markenlogos ersetzen.
