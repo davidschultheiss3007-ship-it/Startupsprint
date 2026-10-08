@@ -59,6 +59,20 @@ Jede Komponente hat ein eigenes CSS-Modul (`*.module.css`). Designwerte stehen z
 - Three.js wird erst geladen, wenn der Netzwerk-Bereich in die Nähe kommt, und pausiert außerhalb des Sichtfelds.
 - `prefers-reduced-motion` wird respektiert.
 
+## Deployment (Cloudflare Pages)
+
+Die Seite muss **gebaut** werden. Wird das Repo ungebaut ausgeliefert, lädt der Browser `src/main.jsx`
+direkt, und die Seite bleibt weiß. Einstellungen unter *Workers & Pages → Projekt → Settings → Builds*:
+
+| Einstellung | Wert |
+| --- | --- |
+| Framework preset | `Vite` (oder `None`) |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Root directory | *(leer lassen)* |
+
+Die Node-Version (22) kommt aus `.node-version`. Danach unter *Deployments* neu deployen.
+
 ## Anfrageformular anbinden
 
 Kopiere `.env.example` nach `.env` und trage einen Endpunkt ein (z. B. Formspree, Getform oder eine eigene API):
