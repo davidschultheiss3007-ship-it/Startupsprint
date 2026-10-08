@@ -19,6 +19,12 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const input = resolve(root, '.preview-build/index.html')
 const output = resolve(root, 'preview/index.html')
 const fontDir = resolve(root, 'scripts/preview-fonts')
+// Gleiche Werte wie in src/lib/submitInquiry.js
+const web3forms = {
+  endpoint: 'https://api.web3forms.com/submit',
+  key: process.env.VITE_WEB3FORMS_KEY || 'a705af5b-a068-40ae-8c58-25217bef35c9',
+  subject: 'Neue Anfrage über RareFind',
+}
 
 const font = (file) => readFileSync(resolve(fontDir, file)).toString('base64')
 const fontCss = `
@@ -63,7 +69,7 @@ const globeSrc = `data:image/jpeg;base64,${globe.toString('base64')}`
 if (errors.length) throw new Error(`Fehler beim Rendern:\n${errors.join('\n')}`)
 
 const html = await page.evaluate(
-  ({ globeSrc, fontCss, staticCss }) => {
+  ({ globeSrc, fontCss, staticCss, web3forms }) => {
     const doc = document.documentElement.cloneNode(true)
     const $ = (sel) => doc.querySelector(sel)
     const $$ = (sel) => [...doc.querySelectorAll(sel)]
@@ -92,13 +98,18 @@ const html = await page.evaluate(
     $$('[class*="_menuButton_"], #mobile-menu, [class*="_bar_"]').forEach((n) => n.remove())
     $$('.skip-link').forEach((n) => n.remove())
 
-    // 5. Formular ohne JS: native Validierung + Versand per E-Mail-Programm
+    // 5. Formular ohne JS: native Validierung + Versand per Web3Forms (HTML-POST)
     const form = $('#anfrage form')
-    const mail = $('footer a[href^="mailto:"]')?.getAttribute('href') ?? 'mailto:'
     form.removeAttribute('novalidate')
-    form.setAttribute('action', `${mail}?subject=Anfrage%20%C3%BCber%20RareFind`)
+    form.setAttribute('action', web3forms.endpoint)
     form.setAttribute('method', 'post')
-    form.setAttribute('enctype', 'text/plain')
+    Object.entries({ access_key: web3forms.key, subject: web3forms.subject, from_name: 'RareFind Website' }).forEach(
+      ([name, value]) => {
+        const input = doc.ownerDocument.createElement('input')
+        Object.assign(input, { type: 'hidden', name, value })
+        form.prepend(input)
+      },
+    )
     ;['request', 'name', 'email', 'consent'].forEach((name) =>
       form.querySelector(`[name="${name}"]`)?.setAttribute('required', ''),
     )
@@ -115,7 +126,7 @@ const html = await page.evaluate(
 
     return '<!doctype html>\n' + doc.outerHTML
   },
-  { globeSrc, fontCss, staticCss },
+  { globeSrc, fontCss, staticCss, web3forms },
 )
 
 await browser.close()
