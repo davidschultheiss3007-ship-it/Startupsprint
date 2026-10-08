@@ -3,8 +3,10 @@
 Mobile-first Landingpage für **RareFind** – persönliche Beratung, starkes Netzwerk und ein individueller Preis pro Fall.
 Gebaut mit **React 19, Vite und Three.js** (über React Three Fiber).
 
-👉 **Vorschau ohne Installation:** [`preview/index.html`](preview/index.html) herunterladen und im Browser öffnen
-(eine einzelne Datei, alles inline).
+👉 **Vorschau ohne Installation:** [`preview/index.html`](preview/index.html) herunterladen und öffnen –
+auch direkt auf dem iPhone (Dateien-App). Die Vorschau ist reines HTML+CSS ohne JavaScript,
+Bilder und Schriften sind eingebettet, sie funktioniert also offline. Der 3D-Globus ist darin ein Standbild,
+das Formular öffnet beim Absenden das E-Mail-Programm.
 
 ## Schnellstart
 
@@ -12,7 +14,7 @@ Gebaut mit **React 19, Vite und Three.js** (über React Three Fiber).
 npm install
 npm run dev            # Entwicklungsserver auf http://localhost:5173
 npm run build          # Produktions-Build nach dist/
-npm run build:preview  # Erzeugt die eigenständige Vorschau preview/index.html
+npm run build:preview  # Erzeugt die statische Vorschau preview/index.html (nutzt Playwright/Chromium)
 ```
 
 ## Aufbau der Seite
@@ -31,6 +33,7 @@ Auf dem Smartphone erscheint nach dem Hero eine feste **„Preis anfragen“-Lei
 ## Projektstruktur
 
 ```
+scripts/build-static-preview.mjs  # rendert die Seite zu statischem HTML für preview/
 src/
 ├── App.jsx                  # Setzt die Sektionen zusammen
 ├── main.jsx                 # Einstiegspunkt

@@ -104,7 +104,8 @@ textarea.input {
   outline-offset: 2px;
 }
 
-.chipActive {
+.chipActive,
+.chip:has(input:checked) {
   background: var(--color-ink);
   border-color: var(--color-ink);
   color: var(--color-invert-ink);
