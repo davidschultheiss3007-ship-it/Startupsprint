@@ -7,25 +7,40 @@ import Network from './components/sections/Network.jsx'
 import Process from './components/sections/Process.jsx'
 import Pricing from './components/sections/Pricing.jsx'
 import Contact from './components/sections/Contact.jsx'
+import FaqPage from './components/pages/FaqPage.jsx'
+import ImprintPage from './components/pages/ImprintPage.jsx'
 import useReveal from './hooks/useReveal.js'
+import useRoute from './hooks/useRoute.js'
+
+function Home() {
+  return (
+    <>
+      <Hero />
+      <Usps />
+      <Network />
+      <Process />
+      <Pricing />
+      <Contact />
+    </>
+  )
+}
+
+const pages = { home: Home, faq: FaqPage, impressum: ImprintPage }
 
 export default function App() {
-  useReveal()
+  const page = useRoute()
+  useReveal(page)
+  const Page = pages[page]
 
   return (
     <>
       <a className="skip-link" href="#main">Zum Inhalt springen</a>
       <Header />
       <main id="main">
-        <Hero />
-        <Usps />
-        <Network />
-        <Process />
-        <Pricing />
-        <Contact />
+        <Page />
       </main>
       <Footer />
-      <MobileCtaBar />
+      {page === 'home' && <MobileCtaBar />}
     </>
   )
 }

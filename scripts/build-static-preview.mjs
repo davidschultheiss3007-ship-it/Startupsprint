@@ -8,6 +8,8 @@
 //   - Schriften als Base64 eingebettet (funktioniert offline)
 //   - JS-abhängige Elemente (Mobile-Menü, CTA-Leiste, Scroll-Animationen) entschärft
 //
+//   - Unterseiten (#/faq, #/impressum) als eigene Dateien, Links darauf umgeschrieben
+//
 // Voraussetzung: `vite build --mode singlefile` hat .preview-build/index.html erzeugt.
 
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
@@ -17,7 +19,9 @@ import { chromium } from 'playwright'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const input = resolve(root, '.preview-build/index.html')
-const output = resolve(root, 'preview/index.html')
+const outDir = resolve(root, 'preview')
+// Hash-Route der App → Datei in preview/
+const pages = { '': 'index.html', '#/faq': 'faq.html', '#/impressum': 'impressum.html' }
 const fontDir = resolve(root, 'scripts/preview-fonts')
 
 const font = (file) => readFileSync(resolve(fontDir, file)).toString('base64')
@@ -60,67 +64,88 @@ const canvasBox = page.locator('#netzwerk [class*="_canvas_"]')
 const globe = await canvasBox.screenshot({ type: 'jpeg', quality: 82 })
 const globeSrc = `data:image/jpeg;base64,${globe.toString('base64')}`
 
-if (errors.length) throw new Error(`Fehler beim Rendern:\n${errors.join('\n')}`)
+async function serialize(hash) {
+  const html = await page.evaluate(
+    ({ globeSrc, fontCss, staticCss, pages, isHome }) => {
+      const doc = document.documentElement.cloneNode(true)
+      const $ = (sel) => doc.querySelector(sel)
+      const $$ = (sel) => [...doc.querySelectorAll(sel)]
 
-const html = await page.evaluate(
-  ({ globeSrc, fontCss, staticCss }) => {
-    const doc = document.documentElement.cloneNode(true)
-    const $ = (sel) => doc.querySelector(sel)
-    const $$ = (sel) => [...doc.querySelectorAll(sel)]
+      // 1. Kein JavaScript
+      $$('script, link[rel="modulepreload"]').forEach((n) => n.remove())
+      // Externe Schriften raus – sind eingebettet
+      $$('link[href*="fonts.g"]').forEach((n) => n.remove())
 
-    // 1. Kein JavaScript
-    $$('script, link[rel="modulepreload"]').forEach((n) => n.remove())
-    // Externe Schriften raus – sind eingebettet
-    $$('link[href*="fonts.g"]').forEach((n) => n.remove())
+      // 2. Scroll-Animationen: alles sofort sichtbar
+      $$('[data-reveal]').forEach((n) => {
+        n.removeAttribute('data-reveal')
+        n.style.transitionDelay = ''
+      })
 
-    // 2. Scroll-Animationen: alles sofort sichtbar
-    $$('[data-reveal]').forEach((n) => {
-      n.removeAttribute('data-reveal')
-      n.style.transitionDelay = ''
-    })
+      // 3. Three.js-Canvas durch Standbild ersetzen
+      const box = $('#netzwerk [class*="_canvas_"]')
+      if (box) {
+        box.innerHTML = ''
+        const img = doc.ownerDocument.createElement('img')
+        img.src = globeSrc
+        img.alt = ''
+        img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%'
+        box.appendChild(img)
+      }
 
-    // 3. Three.js-Canvas durch Standbild ersetzen
-    const box = $('#netzwerk [class*="_canvas_"]')
-    box.innerHTML = ''
-    const img = doc.ownerDocument.createElement('img')
-    img.src = globeSrc
-    img.alt = ''
-    img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%'
-    box.appendChild(img)
+      // 4. JS-abhängige Bedienelemente entfernen
+      $$('[class*="_menuButton_"], #mobile-menu, [class*="_bar_"]').forEach((n) => n.remove())
+      $$('.skip-link').forEach((n) => n.remove())
 
-    // 4. JS-abhängige Bedienelemente entfernen
-    $$('[class*="_menuButton_"], #mobile-menu, [class*="_bar_"]').forEach((n) => n.remove())
-    $$('.skip-link').forEach((n) => n.remove())
+      // 5. Formular ohne JS: native Validierung + Versand per E-Mail-Programm
+      const form = $('#anfrage form')
+      const mail = $('footer a[href^="mailto:"]')?.getAttribute('href') ?? 'mailto:'
+      if (form) {
+        form.removeAttribute('novalidate')
+        form.setAttribute('action', `${mail}?subject=Anfrage%20%C3%BCber%20RareFind`)
+        form.setAttribute('method', 'post')
+        form.setAttribute('enctype', 'text/plain')
+        ;['request', 'name', 'email', 'consent'].forEach((name) =>
+          form.querySelector(`[name="${name}"]`)?.setAttribute('required', ''),
+        )
+      }
+      $$('input[name="website"]').forEach((n) => n.closest('.visually-hidden')?.remove())
+      // Aktiv-Klasse kommt im statischen HTML über :has(input:checked)
+      $$('[class*="_chipActive_"]').forEach((n) =>
+        n.classList.remove([...n.classList].find((c) => c.includes('_chipActive_'))),
+      )
 
-    // 5. Formular ohne JS: native Validierung + Versand per E-Mail-Programm
-    const form = $('#anfrage form')
-    const mail = $('footer a[href^="mailto:"]')?.getAttribute('href') ?? 'mailto:'
-    form.removeAttribute('novalidate')
-    form.setAttribute('action', `${mail}?subject=Anfrage%20%C3%BCber%20RareFind`)
-    form.setAttribute('method', 'post')
-    form.setAttribute('enctype', 'text/plain')
-    ;['request', 'name', 'email', 'consent'].forEach((name) =>
-      form.querySelector(`[name="${name}"]`)?.setAttribute('required', ''),
-    )
-    $$('input[name="website"]').forEach((n) => n.closest('.visually-hidden')?.remove())
-    // Aktiv-Klasse kommt im statischen HTML über :has(input:checked)
-    $$('[class*="_chipActive_"]').forEach((n) =>
-      n.classList.remove([...n.classList].find((c) => c.includes('_chipActive_'))),
-    )
+      // 6. Links zwischen den Seiten: Hash-Routen → Dateien, Startseiten-Anker von Unterseiten → index.html
+      $$('a[href^="#"]').forEach((a) => {
+        const href = a.getAttribute('href')
+        if (href in pages) a.setAttribute('href', pages[href])
+        else if (!isHome && href.length > 1 && !doc.querySelector(href)) a.setAttribute('href', `index.html${href}`)
+      })
 
-    // 6. Styles ergänzen
-    const style = doc.ownerDocument.createElement('style')
-    style.textContent = fontCss + staticCss
-    $('head').appendChild(style)
+      // 7. Styles ergänzen
+      const style = doc.ownerDocument.createElement('style')
+      style.textContent = fontCss + staticCss
+      $('head').appendChild(style)
 
-    return '<!doctype html>\n' + doc.outerHTML
-  },
-  { globeSrc, fontCss, staticCss },
-)
+      return '<!doctype html>\n' + doc.outerHTML
+    },
+    { globeSrc, fontCss, staticCss, pages, isHome: hash === '' },
+  )
+  return html
+}
+
+mkdirSync(outDir, { recursive: true })
+for (const [hash, file] of Object.entries(pages)) {
+  if (hash) {
+    await page.goto(pathToFileURL(input).href + hash)
+    await page.reload() // nur Hash geändert – neu laden, damit die App die Route übernimmt
+    await page.waitForSelector('main h1')
+  }
+  const html = await serialize(hash)
+  if (errors.length) throw new Error(`Fehler beim Rendern:\n${errors.join('\n')}`)
+  if (/<script/i.test(html)) throw new Error(`${file} enthält noch <script>-Tags`)
+  writeFileSync(resolve(outDir, file), html)
+  console.log(`✓ Statische Vorschau geschrieben: preview/${file} (${Math.round(html.length / 1024)} kB)`)
+}
 
 await browser.close()
-
-if (/<script/i.test(html)) throw new Error('Vorschau enthält noch <script>-Tags')
-mkdirSync(dirname(output), { recursive: true })
-writeFileSync(output, html)
-console.log(`✓ Statische Vorschau geschrieben: ${output} (${Math.round(html.length / 1024)} kB)`)
